@@ -7,10 +7,10 @@ export const WhiteLogo = () => {
         alignItems: 'center'
     }}>
         <Image 
-            source={ require('../assets/react-logo-white.png')}
+            source={ require('../assets/logoPizza.jpg')}
             style={{
-                width: 110,
-                height: 100,
+                width: 150,
+                height: 170,
                 marginTop: 30
             }}
         />

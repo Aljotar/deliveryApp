@@ -6,26 +6,26 @@ export const loginStyles = StyleSheet.create({
         paddingHorizontal: 30,
         justifyContent: 'center',
         height: 600,
-        marginTop: 70
+        marginTop: 50
     },
     title: {
-        color: 'white',
+        color: 'black',
         fontSize: 25,
         fontWeight: 'bold',
         marginTop: 20
     },
     label: {
         marginTop: 25,
-        color: 'white',
+        color: 'black',
         fontWeight: 'bold'
     },
     inputField: {
-        color: 'white',
+        color: 'black',
         fontSize: 20,
         paddingBottom: 8
     },
     inputFieldIOS: {
-        borderBottomColor: 'white',
+        borderBottomColor: 'black',
         borderBottomWidth: 2
     },
     buttonContainer: {
@@ -34,29 +34,37 @@ export const loginStyles = StyleSheet.create({
     },
     button: {
         borderWidth: 2,
-        borderColor: 'white',
+        borderColor: 'black',
         paddingHorizontal: 20,
         paddingVertical: 5,
         borderRadius: 100
     },
     buttonText: {
         fontSize: 18,
-        color: 'white'
+        color: 'black'
     },
     buttonContainerRegister: {
         alignItems: 'center',
-        marginTop: 80
+        marginTop: 50
     },
 
     buttonRegister: {
-        borderColor: 'black',
-        borderWidth: 2,
-        paddingHorizontal: 20,
-        paddingVertical: 5,
-        borderRadius: 100
+        paddingHorizontal: 10,
+        borderBottomWidth: 1,
+        paddingVertical: 5
     },
     buttonTextRegister: {
         fontSize: 18,
         color: 'black'
-    } 
+    },
+    buttonReturn: {
+        position: 'absolute',
+        top: 20,
+        left: 20,
+        borderColor: 'black',
+        borderWidth: 1,
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        borderRadius: 100
+    }  
 });

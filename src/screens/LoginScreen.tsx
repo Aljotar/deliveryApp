@@ -1,20 +1,48 @@
-import React from 'react'
-import { KeyboardAvoidingView, Platform, Text, TextInput, View } from 'react-native'
+import React, { useContext, useEffect } from 'react'
+import { Keyboard, KeyboardAvoidingView, Platform, Text, TextInput, View, Alert } from 'react-native'
 import { Background } from '../components/Background'
 import { WhiteLogo } from '../components/WhiteLogo'
 import { loginStyles } from '../theme/loginTheme'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import { useForm } from '../hook/useForm'
+import { TouchableOpacity } from 'react-native';
+import { useForm } from '../hook/useForm';
+import { ScreenStackProps } from 'react-native-screens'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { AuthContext } from '../context/AuthContext'
 
-export const LoginScreen = () => {
+
+interface Props extends NativeStackScreenProps<any, any> {}
+
+export const LoginScreen = ({ navigation }: Props ) => {
+
+    const { signIn, errorMessage, removeError } = useContext(AuthContext);
 
     const { email, password, onChange } = useForm({
         email: '',
         password: ''
     })
 
+
+    useEffect(() => {
+      if( errorMessage.length === 0 ) return;
+    
+      Alert.alert('Login incorrecto',
+      errorMessage,
+      [
+        {
+            text: 'OK',
+            onPress: removeError
+        }
+      ]
+      )
+
+    }, [errorMessage])
+    
+
     const onLogin = () => {
-        console.log({email, password})
+        console.log({ email, password })
+        Keyboard.dismiss();
+        signIn({ correo: email, password });
+
     }
 
     return (
@@ -23,36 +51,42 @@ export const LoginScreen = () => {
             <Background />
 
 
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior={ (Platform.OS === 'ios') ? 'padding': 'height' }
+            >
+
+
                 <View style={loginStyles.formContainer}>
 
                     <WhiteLogo />
 
                     <Text style={loginStyles.title} >Login</Text>
 
-                    <Text style={loginStyles.label} >Emil</Text>
+                    <Text style={loginStyles.label} >Email</Text>
                     <TextInput
-                        placeholder='Ingrese su email:'
-                        placeholderTextColor="rgba(255,255,255,0.5)"
+                        placeholder='Ingrese su email'
+                        placeholderTextColor="rgba(0,0,0,0.5)"
                         keyboardType='email-address'
-                        underlineColorAndroid="white"
+                        underlineColorAndroid="black"
                         style={[
                             loginStyles.inputField,
                             (Platform.OS === 'ios') && loginStyles.inputFieldIOS
                         ]}
-                        selectionColor="white"
+                        selectionColor="black"
                         autoCapitalize='none'
                         autoCorrect={false}
                         onChangeText={(value) => onChange(value, 'email')}
                         value={email}
-                        onSubmitEditing={ onLogin }
+                        onSubmitEditing={onLogin}
                     />
 
 
                     <Text style={loginStyles.label} >Contraseña</Text>
                     <TextInput
                         placeholder='***********'
-                        placeholderTextColor="rgba(255,255,255,0.5)"
-                        underlineColorAndroid="white"
+                        placeholderTextColor="rgba(0,0,0,0.5)"
+                        underlineColorAndroid="black"
                         style={[
                             loginStyles.inputField,
                             (Platform.OS === 'ios') && loginStyles.inputFieldIOS
@@ -61,13 +95,13 @@ export const LoginScreen = () => {
                         secureTextEntry
                         onChangeText={(value) => onChange(value, 'password')}
                         value={password}
-                        onSubmitEditing={ onLogin }
+                        onSubmitEditing={onLogin}
                     />
 
                     <View style={loginStyles.buttonContainer}>
                         <TouchableOpacity
                             style={loginStyles.button}
-                            onPress={ onLogin }
+                            onPress={onLogin}
                         >
                             <Text style={loginStyles.buttonText}>Login</Text>
                         </TouchableOpacity>
@@ -78,6 +112,7 @@ export const LoginScreen = () => {
                     <View style={loginStyles.buttonContainerRegister}>
                         <TouchableOpacity
                             style={loginStyles.buttonRegister}
+                            onPress={ ()=> navigation.navigate('Register') }
                         >
                             <Text style={loginStyles.buttonTextRegister}>Crear cuenta</Text>
                         </TouchableOpacity>
@@ -87,7 +122,8 @@ export const LoginScreen = () => {
 
                 </View>
 
-     
+            </KeyboardAvoidingView>
+
         </>
     )
 }
