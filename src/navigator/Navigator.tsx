@@ -4,12 +4,16 @@ import { LoginScreen } from '../screens/LoginScreen';
 import { RegisterScreen } from '../screens/RegisterScreen';
 import { AuthContext } from '../context/AuthContext';
 import { ProtectedScreen } from '../screens/ProtectedScreen';
+import { LoadingScreen } from '../screens/LoadingScreen';
+import { ProductsNavigator } from './ProductsNavigator';
 
 const Stack = createNativeStackNavigator();
 
 export const Navigator = () => {
 
     const { status } = useContext(AuthContext);
+
+    if ( status === 'checking' ) return <LoadingScreen />
 
     return (
         <Stack.Navigator
@@ -30,7 +34,10 @@ export const Navigator = () => {
                         </>
                     )
                     : (
+                        <>
+                        <Stack.Screen name="ProductsNavigator" component={ProductsNavigator} />
                         <Stack.Screen name="Protected" component={ProtectedScreen} />
+                        </>
                     )
             }
         </Stack.Navigator>

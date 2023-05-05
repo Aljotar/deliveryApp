@@ -1,26 +1,50 @@
-import React from 'react'
-import { Keyboard, KeyboardAvoidingView, Platform, Text, TextInput, View } from 'react-native'
+import React, { useContext, useEffect } from 'react'
+import { Alert, Keyboard, KeyboardAvoidingView, Platform, Text, TextInput, View } from 'react-native'
 import { WhiteLogo } from '../components/WhiteLogo'
 import { loginStyles } from '../theme/loginTheme'
 import { TouchableOpacity } from 'react-native';
 import { useForm } from '../hook/useForm';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { AuthContext } from '../context/AuthContext';
 
-interface Props extends NativeStackScreenProps<any, any> {}
-
-
-export const RegisterScreen = ({ navigation }:Props) => {
+interface Props extends NativeStackScreenProps<any, any> { }
 
 
-    const { email, password,name, onChange } = useForm({
+export const RegisterScreen = ({ navigation }: Props) => {
+
+    const { signUp, errorMessage, removeError } = useContext(AuthContext)
+
+
+    const { email, password, name, onChange } = useForm({
         name: '',
         email: '',
         password: ''
     })
 
+    useEffect(() => {
+        if (errorMessage.length === 0) return;
+
+        Alert.alert('Registro incorrecto',
+            errorMessage,
+            [
+                {
+                    text: 'OK',
+                    onPress: removeError
+                }
+            ]
+        )
+
+    }, [errorMessage])
+
+
     const onRegister = () => {
         console.log({ email, password, name })
         Keyboard.dismiss();
+        signUp({
+            nombre: name,
+            password: password,
+            correo: email
+        })
     }
 
     return (
@@ -29,13 +53,11 @@ export const RegisterScreen = ({ navigation }:Props) => {
 
             <KeyboardAvoidingView
                 style={{ flex: 1 }}
-                behavior={ (Platform.OS === 'ios') ? 'padding': 'height' }
+                behavior={(Platform.OS === 'ios') ? 'padding' : 'height'}
             >
 
 
                 <View style={loginStyles.formContainer}>
-
-                    <WhiteLogo />
 
                     <Text style={loginStyles.title}>Registro</Text>
 
@@ -102,10 +124,10 @@ export const RegisterScreen = ({ navigation }:Props) => {
                     </View>
 
                     <TouchableOpacity
-                        onPress={ ()=> navigation.replace('Login')}
-                        style={ loginStyles.buttonReturn }
+                        onPress={() => navigation.replace('Login')}
+                        style={loginStyles.buttonReturn}
                     >
-                        <Text style={ loginStyles.buttonText } >Login</Text>
+                        <Text style={loginStyles.buttonText} >Login</Text>
                     </TouchableOpacity>
 
                 </View>
